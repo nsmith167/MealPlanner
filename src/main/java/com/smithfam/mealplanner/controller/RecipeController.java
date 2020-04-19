@@ -16,15 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.smithfam.mealplanner.model.Recipe;
+import com.smithfam.mealplanner.model.ScheduleMeal;
 import com.smithfam.mealplanner.service.RecipeService;
 
 @RestController
+@RequestMapping(value="/recipes")
 public class RecipeController {
 	
 	@Autowired
 	RecipeService recipeService;
 	
-	@RequestMapping(value = "/all-recipes", method = RequestMethod.GET)
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Recipe> getRecipes() {
 		return this.recipeService.getRecipes();
@@ -37,7 +39,7 @@ public class RecipeController {
 	}
 	
 	
-	@RequestMapping(value = "/add-recipe", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public void addRecipe(@RequestBody Recipe recipe) throws JsonGenerationException, JsonMappingException, IOException {	
 		this.recipeService.addRecipe(recipe);
@@ -49,15 +51,15 @@ public class RecipeController {
 		return this.recipeService.getNextRecipeId();
 	}
 	
-	@RequestMapping(value = "/weekly-recipes", method = RequestMethod.GET)
+	@RequestMapping(value = "/schedule", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Recipe> getWeeklyRecipes() {
-		List<Recipe> recipes = this.generateMealSchedule(this.recipeService.getRecipes());		
+	public List<ScheduleMeal> getWeeklyRecipes() throws Exception {
+		List<ScheduleMeal> recipes = this.generateMealSchedule(this.recipeService.getRecipes());		
 		return recipes;
 	}
 
-	private List<Recipe> generateMealSchedule(List<Recipe> recipes) {
-		List<Recipe> weeklyRecipes = new ArrayList<Recipe>();
+	private List<ScheduleMeal> generateMealSchedule(List<Recipe> recipes) throws Exception {
+		List<ScheduleMeal> weeklyRecipes = new ArrayList<ScheduleMeal>();
 		Random indexGenerator = new Random();
 		ArrayList<Integer> takenNumbers = new ArrayList<Integer>();
 		for(int i = 0; i < 7; i++) {
@@ -65,9 +67,28 @@ public class RecipeController {
 			while(takenNumbers.contains(number)) {
 				number = indexGenerator.nextInt(recipes.size() - 1); 
 			}
-			weeklyRecipes.add(recipes.get(number));
+			weeklyRecipes.add(new ScheduleMeal(this.getDayFromNumber(i), recipes.get(number)));
 			takenNumbers.add(number);
 		}
 		return weeklyRecipes;
+	}
+	
+	private String getDayFromNumber(int dayNum) throws Exception {
+		if (dayNum < 0 || dayNum > 6) {
+			throw new Exception("Invalid day number passed in to RecipeController.getDayFromNumber()."
+					+ "\nNumber must be between 0 and 6.");
+		}
+		else {
+			switch(dayNum) {
+				case(0): return "Sunday";
+				case(1): return "Monday";
+				case(2): return "Tuesday";
+				case(3): return "Wednesday";
+				case(4): return "Thursday";
+				case(5): return "Friday";
+				case(6): return "Saturday";
+				default: return "";
+			}
+		}			
 	}
 }
