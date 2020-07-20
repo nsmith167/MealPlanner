@@ -34,21 +34,29 @@ public class RecipeController {
 	
 	@RequestMapping(value = "/recipe/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Recipe getRecipe(@PathVariable long id) {
+	public Recipe getRecipe(@PathVariable String id) {
 		return this.recipeService.getRecipe(id);
 	}
 	
 	
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/recipe", method = RequestMethod.POST)
 	@ResponseBody
-	public void addRecipe(@RequestBody Recipe recipe) throws JsonGenerationException, JsonMappingException, IOException {	
+	public Recipe addRecipe(@RequestBody Recipe recipe) throws JsonGenerationException, JsonMappingException, IOException {	
 		this.recipeService.addRecipe(recipe);
+		return recipe;
 	}
 	
-	@RequestMapping(value = "/next-id", method = RequestMethod.GET)
+	@RequestMapping(value = "/recipe/{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public long nextRecipeId() {
-		return this.recipeService.getNextRecipeId();
+	public Recipe editRecipe(@RequestBody Recipe recipe) throws JsonGenerationException, JsonMappingException, IOException {	
+		this.recipeService.updateRecipe(recipe);
+		return recipe;
+	}
+	
+	@RequestMapping(value = "/recipe/{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public void removeRecipe(@PathVariable String id) throws JsonGenerationException, JsonMappingException, IOException {	
+		this.recipeService.removeRecipe(id);
 	}
 	
 	@RequestMapping(value = "/schedule", method = RequestMethod.GET)

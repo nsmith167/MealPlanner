@@ -1,20 +1,16 @@
 package com.smithfam.mealplanner.model;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class Recipe {
 	private String name;
 	private String instructions;
-	private List<Ingredient> ingredients;
-	private long id;
+	private String ingredients;
+	private String id;
 	
 	/**
 	 * @param instructions
 	 * @param ingredients
 	 */
-	public Recipe(String instructions, List<Ingredient> ingredients, long id) {
+	public Recipe(String instructions, String ingredients, String id) {
 		this.instructions = instructions;
 		this.ingredients = ingredients;
 		this.setId(id);
@@ -40,13 +36,13 @@ public class Recipe {
 	/**
 	 * @return the ingredients
 	 */
-	public List<Ingredient> getIngredients() {
+	public String getIngredients() {
 		return ingredients;
 	}
 	/**
 	 * @param ingredients the ingredients to set
 	 */
-	public void setIngredients(List<Ingredient> ingredients) {
+	public void setIngredients(String ingredients) {
 		this.ingredients = ingredients;
 	}
 
@@ -67,14 +63,14 @@ public class Recipe {
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

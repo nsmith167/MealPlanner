@@ -48,7 +48,25 @@ public class RecipeJSONRepository {
 		mapper.writeValue(new File("src/main/resources/storage/recipes.json"), this.recipes);
 	}
 
-	public Recipe getRecipe(long id) {
-		return this.recipes.get((int) id);
+	public Recipe getRecipe(String id) {
+		for (Recipe recipe: this.recipes) {
+			if (recipe.getId() != null && recipe.getId().equals(id)) {
+				return recipe;
+			}
+		}
+		return null;
+	}
+	
+	public void removeRecipe(String id) throws JsonGenerationException, JsonMappingException, IOException {
+		Recipe storedRecipe = this.getRecipe(id);
+		storedRecipe.setId(null);
+		this.saveData();
+	}
+	
+	public void updateRecipe(Recipe updatedRecipe) throws JsonGenerationException, JsonMappingException, IOException {
+		Recipe storedRecipe = this.getRecipe(updatedRecipe.getId());
+		this.recipes.remove(storedRecipe);
+		this.recipes.add(updatedRecipe);
+		this.saveData();
 	}
 }
