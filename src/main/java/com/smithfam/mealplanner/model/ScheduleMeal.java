@@ -3,14 +3,16 @@ package com.smithfam.mealplanner.model;
 public class ScheduleMeal {
 	private String day;
 	private Recipe recipe;
+	private RecipeTypeEnum type;
 	
 	/**
 	 * @param day
 	 * @param recipe
 	 */
-	public ScheduleMeal(String day, Recipe recipe) {
+	public ScheduleMeal(String day, Recipe recipe, RecipeTypeEnum type) {
 		this.day = day;
 		this.recipe = recipe;
+		this.setType(type);
 	}
 	
 	/**
@@ -39,6 +41,20 @@ public class ScheduleMeal {
 	 */
 	public void setRecipe(Recipe recipe) {
 		this.recipe = recipe;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public RecipeTypeEnum getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(RecipeTypeEnum type) {
+		this.type = type;
 	}
 
 }

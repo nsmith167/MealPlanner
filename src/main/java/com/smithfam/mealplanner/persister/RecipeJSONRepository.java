@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -15,9 +17,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smithfam.mealplanner.model.Recipe;
 
 @Repository
-public class RecipeJSONRepository {
+public class RecipeJSONRepository implements IRecipeRepository {
 	
 	private ArrayList<Recipe> recipes;
+	private Logger log = LoggerFactory.getLogger(RecipeJSONRepository.class);
 	
 	public RecipeJSONRepository() throws JsonParseException, JsonMappingException, IOException {
 		this.loadData();
@@ -27,7 +30,7 @@ public class RecipeJSONRepository {
 		return this.recipes;
 	}
 	
-	public void addRecipe(Recipe recipe) throws JsonGenerationException, JsonMappingException, IOException {
+	public void addRecipe(Recipe recipe) {
 		this.recipes.add(recipe);
 		this.saveData();
 	}
@@ -43,9 +46,17 @@ public class RecipeJSONRepository {
 		}
 	}
 	
-	private void saveData() throws JsonGenerationException, JsonMappingException, IOException {
+	private void saveData() {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(new File("src/main/resources/storage/recipes.json"), this.recipes);
+		try {
+			mapper.writeValue(new File("src/main/resources/storage/recipes.json"), this.recipes);
+		} catch (JsonGenerationException e) {
+			log.error(e.getMessage());
+		} catch (JsonMappingException e) {
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
 	}
 
 	public Recipe getRecipe(String id) {
@@ -57,13 +68,13 @@ public class RecipeJSONRepository {
 		return null;
 	}
 	
-	public void removeRecipe(String id) throws JsonGenerationException, JsonMappingException, IOException {
+	public void removeRecipe(String id) {
 		Recipe storedRecipe = this.getRecipe(id);
 		storedRecipe.setId(null);
 		this.saveData();
 	}
 	
-	public void updateRecipe(Recipe updatedRecipe) throws JsonGenerationException, JsonMappingException, IOException {
+	public void updateRecipe(Recipe updatedRecipe) {
 		Recipe storedRecipe = this.getRecipe(updatedRecipe.getId());
 		this.recipes.remove(storedRecipe);
 		this.recipes.add(updatedRecipe);

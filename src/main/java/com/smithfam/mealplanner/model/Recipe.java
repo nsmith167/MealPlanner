@@ -5,16 +5,7 @@ public class Recipe {
 	private String instructions;
 	private String ingredients;
 	private String id;
-	
-	/**
-	 * @param instructions
-	 * @param ingredients
-	 */
-	public Recipe(String instructions, String ingredients, String id) {
-		this.instructions = instructions;
-		this.ingredients = ingredients;
-		this.setId(id);
-	}
+	private RecipeTypeEnum recipeType;
 	
 	/**
 	 * Dummy for JSON
@@ -72,6 +63,20 @@ public class Recipe {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the recipeType
+	 */
+	public RecipeTypeEnum getRecipeType() {
+		return recipeType;
+	}
+
+	/**
+	 * @param recipeType the recipeType to set
+	 */
+	public void setRecipeType(RecipeTypeEnum recipeType) {
+		this.recipeType = recipeType;
 	}
 	
 	

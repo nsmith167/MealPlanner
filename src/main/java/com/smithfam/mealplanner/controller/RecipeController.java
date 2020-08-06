@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.smithfam.mealplanner.model.Day;
 import com.smithfam.mealplanner.model.Recipe;
-import com.smithfam.mealplanner.model.ScheduleMeal;
+import com.smithfam.mealplanner.model.RecipeTypeEnum;
 import com.smithfam.mealplanner.service.RecipeService;
 
 @RestController
@@ -61,22 +62,33 @@ public class RecipeController {
 	
 	@RequestMapping(value = "/schedule", method = RequestMethod.GET)
 	@ResponseBody
-	public List<ScheduleMeal> getWeeklyRecipes() throws Exception {
-		List<ScheduleMeal> recipes = this.generateMealSchedule(this.recipeService.getRecipes());		
+	public List<Day> getWeeklyRecipes() throws Exception {
+		List<Day> recipes = this.generateMealSchedule(this.recipeService.getRecipes());		
 		return recipes;
 	}
 
-	private List<ScheduleMeal> generateMealSchedule(List<Recipe> recipes) throws Exception {
-		List<ScheduleMeal> weeklyRecipes = new ArrayList<ScheduleMeal>();
+	private List<Day> generateMealSchedule(List<Recipe> recipes) throws Exception {
+		List<Day> weeklyRecipes = new ArrayList<Day>();
 		Random indexGenerator = new Random();
-		ArrayList<Integer> takenNumbers = new ArrayList<Integer>();
+		//Loop through days of the week
 		for(int i = 0; i < 7; i++) {
-			Integer number = indexGenerator.nextInt(recipes.size() - 1);
-			while(takenNumbers.contains(number)) {
-				number = indexGenerator.nextInt(recipes.size() - 1); 
+			ArrayList<Integer> takenNumbers = new ArrayList<Integer>();
+			Day dailyRecipes = new Day();
+			dailyRecipes.setDay(this.getDayFromNumber(i));
+			System.out.println(this.getDayFromNumber(i));
+			//Loop through meal times
+			for(RecipeTypeEnum type: RecipeTypeEnum.values()) {
+				System.out.println(type.toString());
+				Integer number = indexGenerator.nextInt(recipes.size());
+				while(takenNumbers.contains(number) || (recipes.get(number).getRecipeType() != type)) {				
+					number = indexGenerator.nextInt(recipes.size()); 
+				}
+				dailyRecipes.setRecipeAtTime(recipes.get(number), type);					
+				takenNumbers.add(number);
 			}
-			weeklyRecipes.add(new ScheduleMeal(this.getDayFromNumber(i), recipes.get(number)));
-			takenNumbers.add(number);
+			
+			weeklyRecipes.add(dailyRecipes);
+			
 		}
 		return weeklyRecipes;
 	}
