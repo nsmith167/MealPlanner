@@ -3,6 +3,7 @@ package com.smithfam.mealplanner.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class RecipeController {
 	
 	@RequestMapping(value = "/recipe/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Recipe getRecipe(@PathVariable String id) {
+	public Optional<Recipe> getRecipe(@PathVariable String id) {
 		return this.recipeService.getRecipe(id);
 	}
 	

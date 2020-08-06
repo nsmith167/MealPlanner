@@ -1,5 +1,8 @@
 package com.smithfam.mealplanner.model;
 
+import org.springframework.data.redis.core.RedisHash;
+
+@RedisHash("Recipe")
 public class Recipe {
 	private String name;
 	private String instructions;
