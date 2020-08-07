@@ -18,7 +18,6 @@ public class RedisConfig {
 	JedisConnectionFactory jedisConnectionFactory() {
 		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(System.getenv("REDISCLOUD_URL"));
-        redisStandaloneConfiguration.setPort(6379);
         redisStandaloneConfiguration.setDatabase(0);
 
         JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
