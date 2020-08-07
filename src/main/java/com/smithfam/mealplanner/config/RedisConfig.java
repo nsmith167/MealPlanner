@@ -27,6 +27,10 @@ public class RedisConfig {
 			redisURI = new URI(System.getenv("REDISCLOUD_URL"));
 			redisStandaloneConfiguration.setHostName(redisURI.getHost());
 			redisStandaloneConfiguration.setPort(redisURI.getPort());
+			if (redisURI.getUserInfo() != null) {
+				String password = redisURI.getUserInfo().split(":",2)[1];
+				redisStandaloneConfiguration.setPassword(password);
+			}
 	        redisStandaloneConfiguration.setDatabase(0);
 		} catch (URISyntaxException e) {
 			logger.error(e.getMessage());
