@@ -11,7 +11,7 @@
 	<groupId>com.smithfam</groupId>
 	<artifactId>mealplanner</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>mealplanner</name>
 	<description>An application for storing recipes and helping to plan weekly meals.</description>
 

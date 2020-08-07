@@ -1,1 +1,1 @@
-web: mvn spring-boot:run
+web: java -jar target/mealplanner-0.0.1-SNAPSHOT.jar
