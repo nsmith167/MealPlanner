@@ -34,6 +34,8 @@ public class RedisConfig {
 	        redisStandaloneConfiguration.setDatabase(0);
 		} catch (URISyntaxException e) {
 			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		
 		JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();

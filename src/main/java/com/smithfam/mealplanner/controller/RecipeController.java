@@ -70,26 +70,28 @@ public class RecipeController {
 
 	private List<Day> generateMealSchedule(List<Recipe> recipes) throws Exception {
 		List<Day> weeklyRecipes = new ArrayList<Day>();
-		Random indexGenerator = new Random();
-		//Loop through days of the week
-		for(int i = 0; i < 7; i++) {
-			ArrayList<Integer> takenNumbers = new ArrayList<Integer>();
-			Day dailyRecipes = new Day();
-			dailyRecipes.setDay(this.getDayFromNumber(i));
-			System.out.println(this.getDayFromNumber(i));
-			//Loop through meal times
-			for(RecipeTypeEnum type: RecipeTypeEnum.values()) {
-				System.out.println(type.toString());
-				Integer number = indexGenerator.nextInt(recipes.size());
-				while(takenNumbers.contains(number) || (recipes.get(number).getRecipeType() != type)) {				
-					number = indexGenerator.nextInt(recipes.size()); 
+		if (recipes.size() > 0) {
+			Random indexGenerator = new Random();
+			//Loop through days of the week
+			for(int i = 0; i < 7; i++) {
+				ArrayList<Integer> takenNumbers = new ArrayList<Integer>();
+				Day dailyRecipes = new Day();
+				dailyRecipes.setDay(this.getDayFromNumber(i));
+				System.out.println(this.getDayFromNumber(i));
+				//Loop through meal times
+				for(RecipeTypeEnum type: RecipeTypeEnum.values()) {
+					System.out.println(type.toString());
+					Integer number = indexGenerator.nextInt(recipes.size());
+					while(takenNumbers.contains(number) || (recipes.get(number).getRecipeType() != type)) {				
+						number = indexGenerator.nextInt(recipes.size()); 
+					}
+					dailyRecipes.setRecipeAtTime(recipes.get(number), type);					
+					takenNumbers.add(number);
 				}
-				dailyRecipes.setRecipeAtTime(recipes.get(number), type);					
-				takenNumbers.add(number);
+				
+				weeklyRecipes.add(dailyRecipes);
+				
 			}
-			
-			weeklyRecipes.add(dailyRecipes);
-			
 		}
 		return weeklyRecipes;
 	}
