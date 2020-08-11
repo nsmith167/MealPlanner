@@ -67,8 +67,10 @@ public class ScheduleController {
 				//Loop through meal times
 				for(RecipeTypeEnum type: RecipeTypeEnum.values()) {
 					Integer number = indexGenerator.nextInt(recipes.size());
-					while(takenNumbers.contains(number) || (recipes.get(number).getRecipeType() != type)) {				
-						number = indexGenerator.nextInt(recipes.size()); 
+					int tries = 0; //Get out if we get stuck because of limited data
+					while(takenNumbers.contains(number) || (recipes.get(number).getRecipeType() != type) && tries < 1000) {				
+						number = indexGenerator.nextInt(recipes.size());
+						tries++;
 					}
 					dailyRecipes.setRecipeAtTime(recipes.get(number), type);					
 					takenNumbers.add(number);
