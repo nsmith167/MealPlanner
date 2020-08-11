@@ -33,6 +33,7 @@ class Schedule extends Component {
 
         const {schedule, isLoading} = this.state;
 
+
         console.log(schedule);
         if (isLoading) {
             return <p>Loading...</p>;
@@ -42,12 +43,12 @@ class Schedule extends Component {
             return <div class="schedule-day">
                 <h3>{day.day}</h3>
                 <ListGroup>
-                    <ListGroupItem tag="a" href="#" action>{day.breakfast.name}</ListGroupItem>
-                    <ListGroupItem tag="a" href="#" action>{day.amSnack.name}</ListGroupItem>
-                    <ListGroupItem tag="a" href="#" action>{day.lunch.name}</ListGroupItem>
-                    <ListGroupItem tag="a" href="#" action>{day.pmSnack.name}</ListGroupItem>
-                    <ListGroupItem tag="a" href="#" action>{day.dinner.name}</ListGroupItem>
-                    <ListGroupItem tag="a" href="#" action>{day.nightSnack.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href={'/recipe-view/' + day.breakfast.id} action>{day.breakfast.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href={'/recipe-view/' + day.amSnack.id} action>{day.amSnack.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href={'/recipe-view/' + day.lunch.id} action>{day.lunch.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href={'/recipe-view/' + day.pmSnack.id} action>{day.pmSnack.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href={'/recipe-view/' + day.dinner.id} action>{day.dinner.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href={'/recipe-view/' + day.nightSnack.id} action>{day.nightSnack.name}</ListGroupItem>
                 </ListGroup>
             </div>
         });

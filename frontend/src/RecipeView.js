@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.scss';
 import './RecipeForm.scss';
 import AppNavbar from './AppNavbar';
-import {Link, withRouter} from 'react-router-dom';
+import {Link, withRouter } from 'react-router-dom';
 import { Container, Button } from 'reactstrap'
 
 class RecipeView extends Component {
@@ -53,7 +53,6 @@ class RecipeView extends Component {
 
     render() {
         const {recipe} = this.state;
-
         return (
             <div>
                 <AppNavbar />
@@ -72,7 +71,7 @@ class RecipeView extends Component {
                     </div>             
                     <div class="recipe-view-row">
                         <Button color="primary" tag={Link} to={'/recipe-form/' + recipe.id}>Edit</Button>
-                        <Button color="secondary" tag={Link} to={'/'} className="cancelButton">Cancel</Button>
+                        <Button color="secondary" onClick={() => this.props.history.goBack()} className="cancelButton">Cancel</Button>
                         <Button color="danger" className="deleteButton" onClick={this.handleDelete}>Delete</Button>
                     </div>
                 </Container>
