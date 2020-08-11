@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import './App.scss';
 import AppNavbar from './AppNavbar';
-import { Container, Table } from 'reactstrap'
+import { Container, ListGroup, ListGroupItem, Row, Col, Button } from 'reactstrap'
 
 
 class Schedule extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {meals: [], isLoading : true};
+        this.state = {schedule: [], isLoading : true};
+
+        this.generateNewSchedule = this.generateNewSchedule.bind(this);
     }
 
     componentDidMount() {
@@ -16,22 +18,38 @@ class Schedule extends Component {
 
         fetch('recipes/schedule')
             .then(response => response.json())
-            .then(data => this.setState({meals: data, isLoading: false}));
+            .then(data => this.setState({schedule: data, isLoading: false}));
+    }
+
+    async generateNewSchedule() {
+        this.setState({isLoading: true});
+
+        await fetch('/recipes/schedule/new')
+                .then(response => response.json())
+                .then(data => this.setState({schedule: data, isLoading: false}));
     }
 
     render() {
 
-        const {meals, isLoading} = this.state;
+        const {schedule, isLoading} = this.state;
 
+        console.log(schedule);
         if (isLoading) {
             return <p>Loading...</p>;
         }
 
-        const schedule = meals.map(meal => {
-            return <tr key={meal.id}>
-                <td>{meal.day}</td>
-                <td>{meal.recipe.name}</td>
-            </tr>
+        const scheduleDisplay = schedule.days.map(day => {
+            return <div class="schedule-day">
+                <h3>{day.day}</h3>
+                <ListGroup>
+                    <ListGroupItem tag="a" href="#" action>{day.breakfast.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href="#" action>{day.amSnack.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href="#" action>{day.lunch.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href="#" action>{day.pmSnack.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href="#" action>{day.dinner.name}</ListGroupItem>
+                    <ListGroupItem tag="a" href="#" action>{day.nightSnack.name}</ListGroupItem>
+                </ListGroup>
+            </div>
         });
         
         return (
@@ -39,15 +57,10 @@ class Schedule extends Component {
                 <AppNavbar />
                 <Container>
                     <h1>Meal Schedule</h1>
-                        <Table>
-                            <thead>
-                                <th scope="col">Day</th>
-                                <th scope="col">Name</th>
-                            </thead>
-                            <tbody id="recipes">
-                                {schedule}
-                            </tbody>
-                        </Table>
+                    {scheduleDisplay}
+                    <div class="new-schedule-button">
+                        <Button color="primary" onClick={this.generateNewSchedule}>New Schedule</Button>
+                    </div>                   
                 </Container>
             </div>
         );

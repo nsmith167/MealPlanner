@@ -82,7 +82,7 @@ class RecipeForm extends Component {
             },
             body: JSON.stringify(recipe)
         });
-        var submitPath = ((recipe.id) ? ('/recipe-view/' + recipe.id) : '/recipe-list');
+        var submitPath = ((recipe.id) ? ('/recipe-view/' + recipe.id) : '/');
         this.props.history.push(submitPath);
     }
 
@@ -110,12 +110,12 @@ class RecipeForm extends Component {
                             </Col>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="inputInstructions">Instructions</Label>
-                            <Input type="textarea" name="instructions" id="inputInstructions" onChange={this.handleChange} value={recipe.instructions || ''}/>
-                        </FormGroup>
-                        <FormGroup>
                             <Label for="inputIngredients">Ingredients</Label>
                             <Input type="textarea" name="ingredients" id="inputIngredients" onChange={this.handleChange} value={recipe.ingredients || ''}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="inputInstructions">Instructions</Label>
+                            <Input type="textarea" name="instructions" id="inputInstructions" onChange={this.handleChange} value={recipe.instructions || ''}/>
                         </FormGroup>
                         <FormGroup>
                             <Button color="primary" className="saveButton" type="submit">Save</Button>

@@ -1,6 +1,5 @@
 package com.smithfam.mealplanner.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.uuid.Generators;
 import com.smithfam.mealplanner.model.Recipe;
 import com.smithfam.mealplanner.persister.RecipeRedisRepository;
@@ -26,7 +23,7 @@ public class RecipeService {
 		return recipes;
 	}
 	
-	public void addRecipe(Recipe recipe) throws JsonGenerationException, JsonMappingException, IOException {
+	public void addRecipe(Recipe recipe) {
 		recipe.setId(Generators.randomBasedGenerator().generate().toString());
 		this.repository.save(recipe);
 	}
@@ -35,11 +32,11 @@ public class RecipeService {
 		return this.repository.findById(id);
 	}
 
-	public void updateRecipe(Recipe recipe) throws JsonGenerationException, JsonMappingException, IOException {
+	public void updateRecipe(Recipe recipe) {
 		this.repository.save(recipe);
 	}
 	
-	public void removeRecipe(String id) throws JsonGenerationException, JsonMappingException, IOException {
+	public void removeRecipe(String id) {
 		this.repository.deleteById(id);
 	}
 }

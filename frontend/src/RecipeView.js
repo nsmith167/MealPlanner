@@ -62,11 +62,15 @@ class RecipeView extends Component {
                         <h1>{recipe.name || 'Unnamed recipe'}</h1>
                         <h4 class="text-muted">{this.recipeTypeMap[recipe.recipeType]}</h4>
                     </div>
-                    <h3>Ingredients</h3>
-                    <pre>{recipe.ingredients}</pre>
-                    <h3>Instructions</h3>
-                    <pre>{recipe.instructions}</pre>
-                    <div>
+                    <div class="recipe-view-row">
+                        <h3>Ingredients</h3>
+                        <ListElement content={recipe.ingredients} ordered={false} />
+                    </div>
+                    <div class="recipe-view-row">
+                        <h3>Instructions</h3>
+                        <ListElement content={recipe.instructions} ordered={true} />
+                    </div>             
+                    <div class="recipe-view-row">
                         <Button color="primary" tag={Link} to={'/recipe-form/' + recipe.id}>Edit</Button>
                         <Button color="secondary" tag={Link} to={'/'} className="cancelButton">Cancel</Button>
                         <Button color="danger" className="deleteButton" onClick={this.handleDelete}>Delete</Button>
@@ -74,6 +78,16 @@ class RecipeView extends Component {
                 </Container>
             </div>
         );
+    }
+}
+
+const ListElement = props => {
+    const splitContent = props.content.split("\n"); 
+    const listItems = splitContent.map(item => {return <li>{item}</li>});
+    if (props.ordered) {
+        return (<ol>{listItems}</ol>);
+    } else {
+        return (<ul>{listItems}</ul>);
     }
 }
 
