@@ -30,9 +30,6 @@ public class RecipeController {
 	@Autowired
 	RecipeService recipeService;
 	
-	@Autowired
-	ScheduleService scheduleService;
-	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Recipe> getRecipes() {
@@ -66,81 +63,4 @@ public class RecipeController {
 		this.recipeService.removeRecipe(id);
 	}
 	
-	@RequestMapping(value = "/schedule", method = RequestMethod.GET)
-	@ResponseBody
-	public Schedule getWeeklyRecipes() throws Exception {
-		List<Schedule> schedules = this.scheduleService.getSchedules();
-		Schedule schedule;
-		if (schedules == null || schedules.size() == 0) {
-			schedule = this.getNewWeeklyRecipes();
-		}
-		else {
-			schedule = schedules.get(0);
-		}
-		return schedule;
-	}
-	
-	@RequestMapping(value = "/schedule/new", method = RequestMethod.GET)
-	@ResponseBody
-	public Schedule getNewWeeklyRecipes() throws Exception {
-		Schedule schedule = this.generateMealSchedule(this.recipeService.getRecipes());
-		List<Schedule> existingSchedules = this.scheduleService.getSchedules();
-		if (existingSchedules.size() > 0) {
-			schedule.setId(existingSchedules.get(0).getId());
-			this.scheduleService.updateSchedule(schedule);
-		}
-		else {
-			this.scheduleService.addSchedule(schedule);
-		}
-		return schedule;
-	}
-
-	private Schedule generateMealSchedule(List<Recipe> recipes) throws Exception {
-		Schedule weeklyRecipes = new Schedule();
-		if (recipes.size() > 0) {
-			Random indexGenerator = new Random();
-			//Loop through days of the week
-			for(int i = 0; i < 7; i++) {
-				ArrayList<Integer> takenNumbers = new ArrayList<Integer>();
-				Day dailyRecipes = new Day();
-				dailyRecipes.setDay(this.getDayFromNumber(i));
-				//Loop through meal times
-				for(RecipeTypeEnum type: RecipeTypeEnum.values()) {
-					Integer number = indexGenerator.nextInt(recipes.size());
-					while(takenNumbers.contains(number) || (recipes.get(number).getRecipeType() != type)) {				
-						number = indexGenerator.nextInt(recipes.size()); 
-					}
-					dailyRecipes.setRecipeAtTime(recipes.get(number), type);					
-					takenNumbers.add(number);
-					//Allow recipes to be re-used within a day if necessary
-					if (takenNumbers.size() == recipes.size()) {
-						takenNumbers.clear();
-					}
-				}
-				
-				weeklyRecipes.addDay(dailyRecipes);
-				
-			}
-		}
-		return weeklyRecipes;
-	}
-	
-	private String getDayFromNumber(int dayNum) throws Exception {
-		if (dayNum < 0 || dayNum > 6) {
-			throw new Exception("Invalid day number passed in to RecipeController.getDayFromNumber()."
-					+ "\nNumber must be between 0 and 6.");
-		}
-		else {
-			switch(dayNum) {
-				case(0): return "Sunday";
-				case(1): return "Monday";
-				case(2): return "Tuesday";
-				case(3): return "Wednesday";
-				case(4): return "Thursday";
-				case(5): return "Friday";
-				case(6): return "Saturday";
-				default: return "";
-			}
-		}			
-	}
 }

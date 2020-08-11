@@ -16,7 +16,7 @@ class Schedule extends Component {
     componentDidMount() {
         this.setState({isLoading: true});
 
-        fetch('recipes/schedule')
+        fetch('/schedule')
             .then(response => response.json())
             .then(data => this.setState({schedule: data, isLoading: false}));
     }
@@ -24,7 +24,7 @@ class Schedule extends Component {
     async generateNewSchedule() {
         this.setState({isLoading: true});
 
-        await fetch('/recipes/schedule/new')
+        await fetch('/schedule/new')
                 .then(response => response.json())
                 .then(data => this.setState({schedule: data, isLoading: false}));
     }
