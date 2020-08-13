@@ -8,7 +8,7 @@ import { Container, Button } from 'reactstrap'
 class RecipeView extends Component {
     emptyRecipe = {
         name: '',
-        recipeType: '',
+        recipeTypes: [],
         instructions: '',
         ingredients: '',
     };
@@ -53,13 +53,15 @@ class RecipeView extends Component {
 
     render() {
         const {recipe} = this.state;
+        var convertedRecipeTypes = recipe.recipeTypes.map(type => this.recipeTypeMap[type]);
+        convertedRecipeTypes = convertedRecipeTypes.join(', ');
         return (
             <div>
                 <AppNavbar />
                 <Container>
                     <div class="recipe-header">
                         <h1>{recipe.name || 'Unnamed recipe'}</h1>
-                        <h4 class="text-muted">{this.recipeTypeMap[recipe.recipeType]}</h4>
+                        <h4 class="text-muted">{convertedRecipeTypes}</h4>
                     </div>
                     <div class="recipe-view-row">
                         <h3>Ingredients</h3>

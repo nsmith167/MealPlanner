@@ -4,40 +4,40 @@ import './RecipeForm.scss';
 import AppNavbar from './AppNavbar';
 import {Link, withRouter} from 'react-router-dom';
 import { Container, Form, FormGroup, Label, Input, Button, Col } from 'reactstrap'
+import MultiSelect from "react-multi-select-component";
 
 
 class RecipeForm extends Component {
 
     emptyRecipe = {
         name: '',
-        recipeType: 'Breakfast',
+        recipeTypes: [],
         instructions: '',
         ingredients: '',
     };
 
-    recipeTypeMap = {
-        BREAKFAST: "Breakfast",
-        AM_SNACK: "AM Snack",
-        LUNCH: "Lunch",
-        PM_SNACK: "PM Snack",
-        DINNER: "Dinner",
-        NIGHT_SNACK: "Night Snack"
-    }
+    recipeTypeOptions = [
+        {label: "Breakfast", value: "BREAKFAST"},
+        {label: "AM Snack", value: "AM_SNACK"},
+        {label: "Lunch", value: "LUNCH"},
+        {label: "PM Snack", value: "PM_SNACK"},
+        {label: "Dinner", value: "DINNER"},
+        {label: "Night Snack", value: "NIGHT_SNACK"}
+    ]
 
     constructor(props) {
         super(props);
         this.state = {
             recipe: this.emptyRecipe,
-            recipeTypes: []
+            selectedRecipeTypeOptions: []
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleMultiSelectChange = this.handleMultiSelectChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
 
     async componentDidMount() {
-        const returnedRecipeTypes = await (await fetch(`/recipetypes`)).json();
-        this.setState({recipeTypes: returnedRecipeTypes.map(type => this.recipeTypeMap[type])});
         if (this.props.match.params.id !== 'new') {
             const returnedRecipe = await (await fetch(`/recipes/recipe/${this.props.match.params.id}`)).json();
             this.setState({recipe: returnedRecipe});
@@ -51,6 +51,12 @@ class RecipeForm extends Component {
         let recipe = {...this.state.recipe};
         recipe[name] = value;
         this.setState({recipe});
+    }
+
+    handleMultiSelectChange(event) {
+        let recipe = {...this.state.recipe};
+        recipe["recipeTypes"] = event.map(selection => selection["value"]);
+        this.setState({recipe, selectedRecipeTypeOptions: event});
     }
 
     async handleDelete(event) {
@@ -72,8 +78,6 @@ class RecipeForm extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         const {recipe} = this.state;
-        recipe.recipeType = Object.keys(this.recipeTypeMap).find(key => this.recipeTypeMap[key] === recipe.recipeType);
-
         await fetch('/recipes/recipe' + (recipe.id ? '/' + recipe.id : ''), {
             method: (recipe.id) ? 'PUT' : 'POST',
             headers: {
@@ -86,10 +90,8 @@ class RecipeForm extends Component {
     }
 
     render() {
-        const {recipe, recipeTypes} = this.state;
+        const {recipe, selectedRecipeTypeOptions} = this.state;
         const title = <h1>{recipe.id ? 'Edit Recipe' : 'New Recipe'}</h1>;
-        const recipeTypeOptions = recipeTypes.map(type => <option>{type}</option>);
-
         return (
             <div>
                 <AppNavbar />
@@ -103,9 +105,7 @@ class RecipeForm extends Component {
                         <FormGroup row>
                             <Col sm={4}>
                                 <Label for="typeSelect">Recipe Type</Label>
-                                <Input type="select" name="recipeType" id="typeSelect" onChange={this.handleChange} value={this.recipeTypeMap[recipe.recipeType]}>
-                                    {recipeTypeOptions}
-                                </Input>
+                                <MultiSelect name="recipeTypes" id="typeSelect" onChange={this.handleMultiSelectChange} options={this.recipeTypeOptions} value={selectedRecipeTypeOptions}/>
                             </Col>
                         </FormGroup>
                         <FormGroup>
