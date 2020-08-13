@@ -1,5 +1,7 @@
 package com.smithfam.mealplanner.model;
 
+import java.util.List;
+
 import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("Recipe")
@@ -8,7 +10,7 @@ public class Recipe {
 	private String instructions;
 	private String ingredients;
 	private String id;
-	private RecipeTypeEnum recipeType;
+	private List<RecipeTypeEnum> recipeTypes;
 	
 	/**
 	 * Dummy for JSON
@@ -71,15 +73,15 @@ public class Recipe {
 	/**
 	 * @return the recipeType
 	 */
-	public RecipeTypeEnum getRecipeType() {
-		return recipeType;
+	public List<RecipeTypeEnum> getRecipeTypes() {
+		return recipeTypes;
 	}
 
 	/**
 	 * @param recipeType the recipeType to set
 	 */
-	public void setRecipeType(RecipeTypeEnum recipeType) {
-		this.recipeType = recipeType;
+	public void setRecipeTypes(List<RecipeTypeEnum> recipeTypes) {
+		this.recipeTypes = recipeTypes;
 	}
 	
 	

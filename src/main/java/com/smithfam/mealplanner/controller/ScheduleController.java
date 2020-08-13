@@ -68,7 +68,7 @@ public class ScheduleController {
 				for(RecipeTypeEnum type: RecipeTypeEnum.values()) {
 					Integer number = indexGenerator.nextInt(recipes.size());
 					int tries = 0; //Get out if we get stuck because of limited data
-					while(takenNumbers.contains(number) || (recipes.get(number).getRecipeType() != type) && tries < 1000) {				
+					while(takenNumbers.contains(number) || !(recipes.get(number).getRecipeTypes().contains(type)) && tries < 1000) {				
 						number = indexGenerator.nextInt(recipes.size());
 						tries++;
 					}
