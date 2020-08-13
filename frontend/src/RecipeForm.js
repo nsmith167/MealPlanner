@@ -40,7 +40,7 @@ class RecipeForm extends Component {
     async componentDidMount() {
         if (this.props.match.params.id !== 'new') {
             const returnedRecipe = await (await fetch(`/recipes/recipe/${this.props.match.params.id}`)).json();
-            this.setState({recipe: returnedRecipe});
+            this.setState({recipe: returnedRecipe, selectedRecipeTypeOptions: this.recipeTypeOptions.filter(type => returnedRecipe.recipeTypes.includes(type["value"]))});
         }
     }
 
